@@ -1,0 +1,39 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/style1.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+<div class="visme_d" data-title="Company Contact Form" data-url="1jzedz89-company-contact-form?sidebar=true" data-domain="forms" data-full-page="false" data-min-height="600px" data-form-id="105193">
+</div>
+    <form class="form" action="{{ path('app_login_check') }}" method="post">
+        <p class="title">Sign In</p>
+        <p class="message">Sign up now and get full access to our app.</p>
+
+        {% if app.flashes('error') %}
+            <div class="flash-error">
+                {% for message in app.flashes('error') %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <label>
+            <input required="" placeholder="" type="email" name="email" class="input" />
+            <span>Email</span>
+        </label>
+        <label>
+            <input required="" placeholder="" type="password" name="password" class="input" />
+            <span>Password</span>
+        </label>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <button class="submit">Submit</button>
+        <p class="signin">Already have an account? <a href="{{ path('app_enregistre') }}">Enregistre</a></p>
+    </form>
+</div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://static-bundles.visme.co/forms/vismeforms-embed.js"></script>
+{% endblock %}

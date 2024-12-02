@@ -11,20 +11,82 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+
 #[Route('/user')]
 final class UserController extends AbstractController
 {
-    #[Route(name: 'app_user_index', methods: ['GET'])]
+    #[Route('/login', name: 'app_login')]
     public function index(UserRepository $userRepository): Response
+    {
+        return $this->render('user/login.html.twig', [
+            'controller_name' => 'UserController',
+        ]);
+    }
+
+   /* #[Route(name: 'app_user_index', methods: [ 'GET'])]
+    public function dath(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
+    }*/
+
+    //UTILISE PAR DEFFAOUTL
+    private $entityManager;
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+
     }
 
-    //METHODE AJOUTE
+
+     //METHODE LOGIN
+     #[Route('/login-check', name: 'app_login_check', methods: ['POST'])]
+     public function checkLogin(Request $request ,UserRepository $userRepository) : Response
+     {
+         $email = $request->request->get('email');
+         $password = $request->request->get('password');
+         // Rechercher l'utilisateur par email
+         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+ 
+         if ($user && $user->getMotDePasse() === $password) {
+            if($user && $user->getType() === 'etudian'){
+                // Stocker l'information de connexion dans la session
+             $session = $request->getSession();
+             $session->set('user_id', $user->getId());
+ 
+             // Rediriger vers la page d'accueil
+             return $this->redirectToRoute('app_Etudient');
+            }elseif($user && $user->getType() === 'formateur'){
+                // Stocker l'information de connexion dans la session
+             $session = $request->getSession();
+             $session->set('user_id', $user->getId());
+ 
+             // Rediriger vers la page d'accueil
+             return $this->redirectToRoute('app_Fourmateur');
+            }else{
+                
+                // Stocker l'information de connexion dans la session
+             $session = $request->getSession();
+             $session->set('user_id', $user->getId());
+ 
+             // Rediriger vers la page d'accueil
+             return $this->redirectToRoute('app_Admin');
+            }
     
-    #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
+         } else {
+             // Afficher un message d'erreur si les identifiants sont incorrects
+             $this->addFlash('error', 'Email ou mot de passe incorrect');
+ 
+             return $this->redirectToRoute('app_enregistre');
+         }
+        
+     }
+
+
+    //METHODE ENREGISTRE
+    
+    #[Route('/enregistre', name: 'app_enregistre', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
       
@@ -36,7 +98,9 @@ final class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+
+
         }
 
           return $this->render('user/new.html.twig', [
@@ -46,6 +110,8 @@ final class UserController extends AbstractController
         ]);
     }
 
+
+   
 
     //METHODE AFFICHE
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
@@ -75,15 +141,24 @@ final class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/delete', name: 'app_Delete')]
+    public function quote(): Response
+    {
+        return $this->render('user/_delete_form.html.twig', [
+            'controller_name' => 'UserController',
+        ]);
+    }
     //METHODE SUPPRIME
-    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_user_delete',methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_Delete');
+        //return $this->redirectToRoute('app_user_show', [], Response::HTTP_SEE_OTHER);
     }
+
+
 }

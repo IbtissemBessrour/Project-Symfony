@@ -417,7 +417,7 @@ h6,
 }
 
 .team-item:hover .team-social {
-    background: rgba(9, 30, 62, .7);
+    background: rgba(9, 30, 62, .7);;
 }
 
 .team-item:hover .team-social a.btn:first-child {

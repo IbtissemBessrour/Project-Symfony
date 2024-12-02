@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -100,6 +102,39 @@ class IndexController extends AbstractController
     public function quote(): Response
     {
         return $this->render('index/quote.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+    private $entityManager;
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+
+    }
+
+    #[Route('/Admin', name: 'app_Admin')]
+    public function Admin(): Response
+    {
+        $users = $this->entityManager->getRepository(User::class)->findAll();
+        return $this->render('dashboard/adminDa.html.twig', [
+            'users' => $users,
+        ]);
+    }
+
+    #[Route('/Etudient', name: 'app_Etudient')]
+    public function Etudient(): Response
+    {
+        $users = $this->entityManager->getRepository(User::class)->findAll();
+        return $this->render('dashboard/etudienDa.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+
+    #[Route('/Fourmateur', name: 'app_Fourmateur')]
+    public function Fourmateur(): Response
+    {
+        $users = $this->entityManager->getRepository(User::class)->findAll();
+        return $this->render('dashboard/fourmateurDa.html.twig', [
             'controller_name' => 'IndexController',
         ]);
     }

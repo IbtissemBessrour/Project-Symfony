@@ -1,9 +1,49 @@
-<title>{% block title %}Enregistre {% endblock %}</title>
-
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/style1.css') }}">
+{% endblock %}
 {% block body %}
+<div class="container">
+<div class="visme_d" data-title="Tenant Contact Form" data-url="76jgwg37-tenant-contact-form?sidebar=true" data-domain="forms" data-full-page="false" data-min-height="600px" data-form-id="105194">
+</div>
+{{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+    <div class="form">
+        <p class="title">Register</p>
+        <p class="message">Signup now and get full access to our app.</p>
+        <div class="flex">
+          <div>
+               {{ form_label(form.nom) }}
+               {{ form_widget(form.nom) }}
+               {{ form_errors(form.nom) }}
+          </div>
+          <div >
+              {{ form_label(form.prenom) }}
+              {{ form_widget(form.prenom) }}
+              {{ form_errors(form.prenom) }}
+           </div>
+           </div>
+        <div >
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+            {{ form_errors(form.email) }}
+        </div>
+        <div >
+            {{ form_label(form.Type) }}
+            {{ form_widget(form.Type) }}
+            {{ form_errors(form.Type) }}
+         </div>
+         <div >
+            {{ form_label(form.motDePasse) }}
+            {{ form_widget(form.motDePasse) }}
+            {{ form_errors(form.motDePasse) }}
+        </div>
+        <div class="save">
+             {{ form_widget(form.save) }} 
+        </div>
+        <p class="signin">Already have an acount ? <a href="{{path('app_login')}}">Sign in</a></p>
+   </div>  
+{{ form_end(form) }}
 
-    <h1>Create new User</h1>
-
-     {{ include('user/_form.html.twig') }}
- <a href="{{ path('app_user_index') }}">Back to list</a>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://static-bundles.visme.co/forms/vismeforms-embed.js"></script>
 {% endblock %}
