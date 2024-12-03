@@ -1,0 +1,41 @@
+
+
+{% block title %}Bibliotheque index{% endblock %}
+
+{% block body %}
+    <h1>Bibliotheque index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>TitreDoc</th>
+                <th>AuteurDoc</th>
+                <th>TypeDoc</th>
+                <th>DateDoc</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bibliotheque in bibliotheques %}
+            <tr>
+                <td>{{ bibliotheque.id }}</td>
+                <td>{{ bibliotheque.titreDoc }}</td>
+                <td>{{ bibliotheque.auteurDoc }}</td>
+                <td>{{ bibliotheque.typeDoc }}</td>
+                <td>{{ bibliotheque.dateDoc ? bibliotheque.dateDoc|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_bibliotheque_show', {'id': bibliotheque.id}) }}">show</a>
+                    <a href="{{ path('app_bibliotheque_edit', {'id': bibliotheque.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_bibliotheque_new') }}">Create new</a>
+{% endblock %}

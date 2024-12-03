@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Bibliotheque;
+use App\Entity\Evenement;
+use App\Entity\Session;
+use App\Entity\Formation;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -113,11 +117,14 @@ class IndexController extends AbstractController
     }
 
     #[Route('/Admin', name: 'app_Admin')]
+
     public function Admin(): Response
     {
         $users = $this->entityManager->getRepository(User::class)->findAll();
+        $bibliotheque = $this->entityManager->getRepository(Bibliotheque::class)->findAll();
         return $this->render('dashboard/adminDa.html.twig', [
             'users' => $users,
+            'bibliotheque' => $bibliotheque,
         ]);
     }
 
@@ -125,17 +132,21 @@ class IndexController extends AbstractController
     public function Etudient(): Response
     {
         $users = $this->entityManager->getRepository(User::class)->findAll();
+        $evenement = $this->entityManager->getRepository(Evenement::class)->findAll();
         return $this->render('dashboard/etudienDa.html.twig', [
-            'controller_name' => 'IndexController',
+            'users' => $users,
+            'evenement' => $evenement,
         ]);
     }
 
     #[Route('/Fourmateur', name: 'app_Fourmateur')]
     public function Fourmateur(): Response
     {
-        $users = $this->entityManager->getRepository(User::class)->findAll();
+        $formation = $this->entityManager->getRepository(Formation::class)->findAll();
+        $session = $this->entityManager->getRepository(Session::class)->findAll();
         return $this->render('dashboard/fourmateurDa.html.twig', [
-            'controller_name' => 'IndexController',
+            'formation' => $formation,
+            'session' => $session,
         ]);
     }
 

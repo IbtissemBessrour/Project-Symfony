@@ -1,0 +1,36 @@
+
+{% block title %}Formation index{% endblock %}
+
+{% block body %}
+    <h1>Formation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomFormation</th>
+                <th>Discription</th>
+                <th>NombrePlaces</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for Formation in formation%}
+        <tr>
+          <td>{{ Formation.id }}</td>
+          <td>{{ Formation.nomFormation }}</td>
+          <td>{{ Formation.discription }}</td>
+          <td>{{ Formation.nombrePlaces }}</td>
+          <td><a href="{{ path('app_formation_show', {'id': formation.id}) }}">show</a></td>
+          <td><a href="{{ path('app_formation_edit', {'id': formation.id}) }}">edit</a></td>
+        </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_Fourmateur') }}">Create new</a>
+{% endblock %}

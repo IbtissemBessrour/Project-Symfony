@@ -1,0 +1,10 @@
+
+{% block title %}New Bibliotheque{% endblock %}
+
+{% block body %}
+    <h1>Create new Bibliotheque</h1>
+
+    {{ include('bibliotheque/_form.html.twig') }}
+
+    <a href="{{ path('app_bibliotheque_index') }}">back to list</a>
+{% endblock %}

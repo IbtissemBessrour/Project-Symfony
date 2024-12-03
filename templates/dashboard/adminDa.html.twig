@@ -438,7 +438,9 @@
         </ul>
       </nav>
       <!-- partial -->  
- <div class="row">
+ <table>
+<div class="content">
+    <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
@@ -449,7 +451,7 @@
                             <table class="table student-data-table m-t-20">
                                 <thead>
                                 <tr>
-                                    
+                                    <th>Id</th>
                                     <th>Nom d'utilisateur</th>
                                     <th>Prenom</th>
                                     <th>Adresse</th>
@@ -460,18 +462,20 @@
                                 <tbody>
                                     {% for user in users %}
                                         <tr>
+                                          <td>{{ user.id }}</td>
                                            <td>{{ user.nom }}</td>
                                             <td>{{ user.prenom }}</td>
                                             <td>{{ user.email }}</td>
                                             <td>{{ user.Type }}</td>
                                             <td>{{ user.motDePasse }}</td>
                                             <td>
-                                                <a href="{{ path('app_user_delete', { id: user.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">Supprimer</a>
-                                            </td>
+                                              {{ include('user/_delete_form.html.twig') }}                                         
+                                           </td>
                                             <td>
                                                 <a href="{{ path('app_user_edit', { id: user.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir modifie cet utilisateur ?');">Modifie</a>
                                             </td>                  
                                         </tr>
+                                        
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -479,7 +483,63 @@
                     </div>
                 </div>
             </div>
-           </div>
+    </div>
+</div>
+<tr>
+<div class="content">
+    <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">All Exam Result</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table student-data-table m-t-20">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Titre de document</th>
+                                    <th>auter de document</th>
+                                    <th>type de document</th>
+                                    <th>date document</th>
+                                  
+                                 
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for bibliotheque in bibliotheque %}
+                                        <tr>
+                                          <td>{{ bibliotheque.id }}</td>
+                                           <td>{{ bibliotheque.titreDoc}}</td>
+                                            <td>{{ bibliotheque.auteurDoc}}</td>
+                                            <td>{{ bibliotheque.typeDoc}}</td>
+                                        
+                                            <td>{{ bibliotheque.dateDoc|date('Y-m-d H:i:s') }}</td>
+                                
+                                            <td>
+                                              {{ include('bibliotheque/_delete_form.html.twig') }}                                         
+                                           </td>
+                                            <td>
+                                                <a href="{{ path('app_bibliotheque_edit', { id: bibliotheque.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir modifie cet utilisateur ?');">Modifie</a>
+                                            </td> 
+                                                                                        <td>
+                                                <a href="{{ path('app_bibliotheque_new', { id: bibliotheque.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir modifie cet utilisateur ?');">Ajoute</a>
+                                            </td>                  
+                                        </tr>
+
+                                        
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+</tr>
+ </table>
 </body>>
 {% endblock %}
 {% block javascripts %}

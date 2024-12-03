@@ -1,0 +1,38 @@
+
+
+{% block title %}Bibliotheque{% endblock %}
+
+{% block body %}
+    <h1>Bibliotheque</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ bibliotheque.id }}</td>
+            </tr>
+            <tr>
+                <th>TitreDoc</th>
+                <td>{{ bibliotheque.titreDoc }}</td>
+            </tr>
+            <tr>
+                <th>AuteurDoc</th>
+                <td>{{ bibliotheque.auteurDoc }}</td>
+            </tr>
+            <tr>
+                <th>TypeDoc</th>
+                <td>{{ bibliotheque.typeDoc }}</td>
+            </tr>
+            <tr>
+                <th>DateDoc</th>
+                <td>{{ bibliotheque.dateDoc ? bibliotheque.dateDoc|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_bibliotheque_index') }}">back to list</a>
+
+    <a href="{{ path('app_bibliotheque_edit', {'id': bibliotheque.id}) }}">edit</a>
+
+    {{ include('bibliotheque/_delete_form.html.twig') }}
+{% endblock %}

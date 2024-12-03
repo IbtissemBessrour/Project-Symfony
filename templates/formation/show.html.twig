@@ -1,0 +1,32 @@
+{% block title %}Formation{% endblock %}
+
+{% block body %}
+    <h1>Formation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ formation.id }}</td>
+            </tr>
+            <tr>
+                <th>NomFormation</th>
+                <td>{{ formation.nomFormation }}</td>
+            </tr>
+            <tr>
+                <th>Discription</th>
+                <td>{{ formation.discription }}</td>
+            </tr>
+            <tr>
+                <th>NombrePlaces</th>
+                <td>{{ formation.nombrePlaces }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_Fourmateur') }}">back to list</a>
+
+    <a href="{{ path('app_formation_edit', {'id': formation.id}) }}">edit</a>
+
+    
+{% endblock %}

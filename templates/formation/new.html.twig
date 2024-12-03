@@ -1,6 +1,6 @@
-{% block title %}Edit User{% endblock %}
+{% block title %}New Formation{% endblock %}
 {% block stylesheets %}
-{% endblock %}
+
        <link href="{{asset('lib/owlcarousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
        <link href="{{asset('lib/animate/animate.min.css')}}" rel="stylesheet">
 
@@ -9,18 +9,19 @@
 
     <!-- Template Stylesheet -->
         <link href="{{asset('css/style.css')}}" rel="stylesheet">
+{% endblock %}
 {% block body %}
-    <h1>Edit User</h1>
+    <h1>Create new Formation</h1>
 
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+       {{ include('formation/_form.html.twig')}}
 
-    <a href="{{ path('app_Admin') }}">back to list</a>
+        <a href="{{ path('app_Fourmateur') }}">back to list</a>
 
 {% endblock %}
-    {% block javascripts %}
+{% block javascripts %}
     <script src="{{asset('lib/wow/wow.min.js')}}"></script>
     <script src="{{asset('lib/easing/easing.min.js')}}"></script>
     <script src="{{asset('lib/waypoints/waypoints.min.js')}}"></script>
     <script src="{{asset('lib/counterup/counterup.min.js')}}"></script>
     <script src="{{asset('lib/owlcarousel/owl.carousel.min.js')}}"></script>
-    {% endblock %}
+{% endblock %}

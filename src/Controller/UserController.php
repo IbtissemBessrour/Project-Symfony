@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 
 
 #[Route('/user')]
@@ -123,7 +125,7 @@ final class UserController extends AbstractController
     }
 
     //METHODE MODIFIE
-    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET','POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UserType::class, $user);
@@ -132,7 +134,7 @@ final class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_Admin', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit.html.twig', [
@@ -141,24 +143,20 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/delete', name: 'app_Delete')]
-    public function quote(): Response
-    {
-        return $this->render('user/_delete_form.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
     //METHODE SUPPRIME
-    #[Route('/{id}', name: 'app_user_delete',methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'admin_user_delete', methods: ['POST'])]
+    public function deleteUser(User $user): RedirectResponse
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
-        return $this->redirectToRoute('app_Delete');
-        //return $this->redirectToRoute('app_user_show', [], Response::HTTP_SEE_OTHER);
-    }
+        // Supprimer l'utilisateur
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();//elle fait le commit dans la liste 
 
+        // Ajouter un message flash pour la confirmation de suppression
+        $this->addFlash('success', 'Utilisateur supprimé avec succès !');
+
+        // Rediriger vers la liste des utilisateurs
+        return $this->redirectToRoute('app_Admin');
+    }
+    
 
 }
