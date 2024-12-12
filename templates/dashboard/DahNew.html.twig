@@ -1,0 +1,189 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+ <link rel="stylesheet" href="{{asset('asset/css/style.css')}}">
+{% endblock %}
+{% block body %}
+ <!-- =============== Navigation ================ -->
+    <div class="containert">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="logo-apple"></ion-icon>
+                        </span>
+                        <span class="title">Hello{{user.nom}}</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ path('app_four') }}">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ path('app_formation_new') }}">
+                        <span class="icon">
+                            <ion-icon name="people-outline"></ion-icon>
+                        </span>
+                        <span class="title">Create new Formation</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ path('app_Session') }}">
+                        <span class="icon">
+                            <ion-icon name="chatbubble-outline"></ion-icon>
+                        </span>
+                        <span class="title">Session</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ path('app_session_new') }}">
+                        <span class="icon">
+                            <ion-icon name="help-outline"></ion-icon>
+                        </span>
+                        <span class="title">Create new Session</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="settings-outline"></ion-icon>
+                        </span>
+                        <span class="title">Settings</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                        </span>
+                        <span class="title">Password</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                        </span>
+                        <span class="title">Sign Out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+       <!-- ========================= Main ==================== -->
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Search here">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+
+                <div class="user">
+                    <img src="{{asset('asset/imgs/customer01.jpg')}}" alt="">
+                </div>
+            </div>
+           <!-- ======================= Cards ================== -->
+            <div class="cardBox">
+                <div class="card">
+                    <div>
+                        <div class="numbers">1,504</div>
+                        <div class="cardName">Daily Views</div>
+                    </div>
+
+                    <div class="iconBx">
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">80</div>
+                        <div class="cardName">Sales</div>
+                    </div>
+
+                    <div class="iconBx">
+                        <ion-icon name="cart-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">284</div>
+                        <div class="cardName">Comments</div>
+                    </div>
+
+                    <div class="iconBx">
+                        <ion-icon name="chatbubbles-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">$7,842</div>
+                        <div class="cardName">Earning</div>
+                    </div>
+
+                    <div class="iconBx">
+                        <ion-icon name="cash-outline"></ion-icon>
+                    </div>
+                </div>
+            </div>
+   <!--==================================New===============================-->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom Formation</th>
+                <th>Description</th>
+                <th>Nombre de Places</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for formation in formation %}
+            <tr>
+                <td>{{ formation.id }}</td>
+                <td>{{ formation.nomFormation }}</td>
+                <td>{{ formation.discription }}</td>
+                <td>{{ formation.nombrePlaces }}</td>
+                <td>
+                    <a href="{{ path('app_formation_show', {'id': formation.id}) }}" class="btn btn-info btn-sm">Show</a>
+                    <a href="{{ path('app_formation_edit', {'id': formation.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form method="post" action="{{ path('app_formation_delete', {'id': formation.id}) }}" style="display: inline-block;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formation.id) }}">
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block javascripts %}
+ <!-- =========== Scripts =========  -->
+    <script src="{{asset('asset/js/main.js')}}"></script>
+   
+    <!-- ====== ionicons ======= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+{% endblock %}

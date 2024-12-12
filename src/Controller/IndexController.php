@@ -150,4 +150,30 @@ class IndexController extends AbstractController
         ]);
     }
 
+    #[Route('/four', name: 'app_four')]
+    public function fourmateu(): Response
+    {
+        $user = $this->getUser();
+        $formation = $this->entityManager->getRepository(Formation::class)->findAll();
+        $session = $this->entityManager->getRepository(Session::class)->findAll();
+        return $this->render('dashboard/DahNew.html.twig', [
+            'formation' => $formation,
+            'session' => $session,
+            'user' => $user,
+        ]);
+    }
+
+
+    #[Route('/four', name: 'app_Session')]
+    public function Session(): Response
+    {
+        $user = $this->getUser();
+        $formation = $this->entityManager->getRepository(Formation::class)->findAll();
+        $session = $this->entityManager->getRepository(Session::class)->findAll();
+        return $this->render('dashboard/DahNewSe.html.twig', [
+            'formation' => $formation,
+            'session' => $session,
+            'user' => $user,
+        ]);
+    }
 }

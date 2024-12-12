@@ -1,27 +1,45 @@
+{% extends 'base.html.twig' %}
 {% block title %}New Formation{% endblock %}
+
 {% block stylesheets %}
-
-       <link href="{{asset('lib/owlcarousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
-       <link href="{{asset('lib/animate/animate.min.css')}}" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-       <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-        <link href="{{asset('css/style.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 {% endblock %}
+
 {% block body %}
     <h1>Create new Formation</h1>
 
-       {{ include('formation/_form.html.twig')}}
+    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+        <div class="form-group">
+            {{ form_label(form.nomFormation, null, {'label_attr': {'class': 'control-label'}}) }}
+            <div class="col-sm-10">
+                {{ form_widget(form.nomFormation, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.nomFormation, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.discription, null, {'label_attr': {'class': 'control-label'}}) }}
+            <div class="col-sm-10">
+                {{ form_widget(form.discription, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.discription, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.nombrePlaces, null, {'label_attr': {'class': 'control-label'}}) }}
+            <div class="col-sm-10">
+                {{ form_widget(form.nombrePlaces, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.nombrePlaces, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+    {{ form_end(form) }}
 
-        <a href="{{ path('app_Fourmateur') }}">back to list</a>
-
+    <a href="{{ path('app_formation_index') }}" class="btn btn-secondary">Back to list</a>
 {% endblock %}
+
 {% block javascripts %}
-    <script src="{{asset('lib/wow/wow.min.js')}}"></script>
-    <script src="{{asset('lib/easing/easing.min.js')}}"></script>
-    <script src="{{asset('lib/waypoints/waypoints.min.js')}}"></script>
-    <script src="{{asset('lib/counterup/counterup.min.js')}}"></script>
-    <script src="{{asset('lib/owlcarousel/owl.carousel.min.js')}}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 {% endblock %}

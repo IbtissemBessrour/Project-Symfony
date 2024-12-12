@@ -1,4 +1,5 @@
-<title>{% block title %}Dashboard-Formateur{% endblock %}</title>
+{% extends 'base.html.twig' %}
+{% block title %}Dashboard-Formateur{% endblock %}
         
 
 {% block stylesheets %}
@@ -459,23 +460,26 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {% for Formation in formation %}
+                                    {% for formation in formation %}
                                         <tr>
-
-                                          <td>{{ Formation.id }}</td>
-                                           <td>{{ Formation.nomFormation }}</td>
-                                            <td>{{ Formation.discription }}</td>
-                                            <td>{{ Formation.nombrePlaces }}</td>
+                                            <td>{{ formation.id }}</td>
+                                            <td>{{ formation.nomFormation }}</td>
+                                            <td>{{ formation.discription }}</td>
+                                            <td>{{ formation.nombrePlaces }}</td>
                                             <td>
-                                              {{ include('formation/_delete_form.html.twig') }}                                        
+                                               <form method="post" action="{{ path('app_formation_delete', {'id': formation.id}) }}" style="display: inline-block;">
+                                               <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formation.id) }}">
+                                               <button class="btn btn-danger btn-sm">Delete</button>                                        
                                            </td>
                                             <td>
-                                                <a href="{{ path('app_formation_edit', { id: Formation.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir modifie cet Formation ?');">Modifie</a>
+                                                <a href="{{ path('app_formation_show', {'id': formation.id}) }}" class="btn btn-info btn-sm">Show</a>
                                             </td> 
                                             <td> 
-                                             <a href="{{ path('app_formation_new', { id: Formation.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir ajoute cet Formation ?');">Ajoute</a>
+                                              <a href="{{ path('app_formation_edit', {'id': formation.id}) }}" class="btn btn-warning btn-sm">Edit</a>
                                            </td>
-
+                                           <td> 
+                                              <a href="{{ path('app_formation_new') }}" class="btn btn-primary">Create new</a>
+                                            </td>
                                         </tr>
                                        
                                     {% endfor %}
@@ -487,6 +491,7 @@
             </div>
     </div>
 </div>
+
 
 <tr>
 <div class="content">
@@ -508,21 +513,23 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {% for Formation in session %}
+                                    {% for formation in session %}
                                         <tr>
 
-                                         <td>{{ Formation.id }}</td>
-                                          <td>{{ Formation.dateDebue|date('Y-m-d H:i:s') }}</td>
-                                           <td>{{ Formation.dateFine|date('Y-m-d H:i:s') }}</td>
-                                            <td>{{ Formation.nomFormation }}</td>
+                                         <td>{{ formation.id }}</td>
+                                          <td>{{ formation.dateDebue|date('Y-m-d H:i:s') }}</td>
+                                           <td>{{ formation.dateFine|date('Y-m-d H:i:s') }}</td>
+                                            <td>{{ formation.nomFormation }}</td>
                                             <td>
-                                              {{ include('session/_delete_form.html.twig') }}                                        
+                                              <form method="post" action="{{ path('app_session_delete', {'id': formation.id}) }}" style="display: inline-block;">
+                                               <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formation.id) }}">
+                                               <button class="btn btn-danger btn-sm">Delete</button>                                     
                                            </td>
                                             <td>
-                                                <a href="{{ path('app_session_edit', { id: Formation.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir modifie cet session ?');">Modifie</a>
+                                                <a href="{{ path('app_session_show', {'id': formation.id}) }}" class="btn btn-info btn-sm">Show</a>
                                             </td> 
                                             <td> 
-                                             <a href="{{ path('app_session_new', { id: Formation.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir ajoute cet session ?');">Ajoute</a>
+                                             <a href="{{ path('app_session_edit', {'id': formation.id}) }}" class="btn btn-warning btn-sm">Edit</a>
                                            </td>
 
                                         </tr>

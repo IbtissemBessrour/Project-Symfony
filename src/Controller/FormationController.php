@@ -9,19 +9,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/formation')]
 final class FormationController extends AbstractController
 {
-    #[Route(name: 'app_formation_index', methods: ['GET'])]
+    #[Route('/', name: 'app_formation_index', methods: ['GET'])]
     public function index(FormationRepository $formationRepository): Response
     {
         return $this->render('formation/index.html.twig', [
             'formations' => $formationRepository->findAll(),
+            
         ]);
     }
-
     #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -33,12 +33,12 @@ final class FormationController extends AbstractController
             $entityManager->persist($formation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_Fourmateur', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_four', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('formation/new.html.twig', [
             'formation' => $formation,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -59,23 +59,23 @@ final class FormationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_Fourmateur', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_four', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('formation/edit.html.twig', [
-           'formation' => $formation,
-            'form' => $form,
+            'formation' => $formation,
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}', name: 'app_formation_delete', methods: ['POST'])]
     public function delete(Request $request, Formation $formation, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$formation->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$formation->getId(), $request->request->get('_token'))) {
             $entityManager->remove($formation);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_Fourmateur', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_four', [], Response::HTTP_SEE_OTHER);
     }
 }

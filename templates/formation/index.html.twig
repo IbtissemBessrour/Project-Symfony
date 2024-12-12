@@ -1,36 +1,42 @@
-
+{% extends 'base.html.twig' %}
 {% block title %}Formation index{% endblock %}
 
 {% block body %}
     <h1>Formation index</h1>
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>NomFormation</th>
-                <th>Discription</th>
-                <th>NombrePlaces</th>
-                <th>actions</th>
+                <th>Nom Formation</th>
+                <th>Description</th>
+                <th>Nombre de Places</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for Formation in formation%}
-        <tr>
-          <td>{{ Formation.id }}</td>
-          <td>{{ Formation.nomFormation }}</td>
-          <td>{{ Formation.discription }}</td>
-          <td>{{ Formation.nombrePlaces }}</td>
-          <td><a href="{{ path('app_formation_show', {'id': formation.id}) }}">show</a></td>
-          <td><a href="{{ path('app_formation_edit', {'id': formation.id}) }}">edit</a></td>
-        </tr>
+        {% for formation in formations %}
+            <tr>
+                <td>{{ formation.id }}</td>
+                <td>{{ formation.nomFormation }}</td>
+                <td>{{ formation.discription }}</td>
+                <td>{{ formation.nombrePlaces }}</td>
+                <td>
+                    <a href="{{ path('app_formation_show', {'id': formation.id}) }}" class="btn btn-info btn-sm">Show</a>
+                    <a href="{{ path('app_formation_edit', {'id': formation.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form method="post" action="{{ path('app_formation_delete', {'id': formation.id}) }}" style="display: inline-block;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formation.id) }}">
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_Fourmateur') }}">Create new</a>
+    <a href="{{ path('app_formation_new') }}" class="btn btn-primary">Create new</a>
 {% endblock %}

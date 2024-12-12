@@ -52,21 +52,21 @@ final class UserController extends AbstractController
          $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
  
          if ($user && $user->getMotDePasse() === $password) {
-            if($user && $user->getType() === 'etudian'){
+            if($user && $user->getType() === 'Etudient'){
                 // Stocker l'information de connexion dans la session
              $session = $request->getSession();
              $session->set('user_id', $user->getId());
  
              // Rediriger vers la page d'accueil
              return $this->redirectToRoute('app_Etudient');
-            }elseif($user && $user->getType() === 'formateur'){
+            }elseif($user && $user->getType() === 'Fourmateur'){
                 // Stocker l'information de connexion dans la session
              $session = $request->getSession();
              $session->set('user_id', $user->getId());
  
              // Rediriger vers la page d'accueil
              return $this->redirectToRoute('app_Fourmateur');
-            }else{
+            }elseif($user && $user->getMotDePasse() === "123" && $user->getEmail() === "Admin@esprit.tn"){
                 
                 // Stocker l'information de connexion dans la session
              $session = $request->getSession();
@@ -74,7 +74,9 @@ final class UserController extends AbstractController
  
              // Rediriger vers la page d'accueil
              return $this->redirectToRoute('app_Admin');
-            }
+            }else{ $this->addFlash('error', 'Email ou mot de passe incorrect');
+ 
+                return $this->redirectToRoute('app_enregistre');}
     
          } else {
              // Afficher un message d'erreur si les identifiants sont incorrects
