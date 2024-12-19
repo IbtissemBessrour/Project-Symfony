@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz Management{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Quiz Management</h1>
+
+        {# Affichage des messages flash (succès ou erreur) #}
+        {% for type, messages in app.flashes %}
+            <div class="alert alert-{{ type }} mt-3">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {# Formulaire de recherche #}
+        <form method="get" action="{{ path('app_quiz_index') }}" class="mb-4">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    name="search" 
+                    class="form-control" 
+                    placeholder="Search by title" 
+                    value="{{ app.request.get('search') }}"
+                >
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+
+        {# Tableau des quiz #}
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Passing Score</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz.id }}</td>
+                    <td>{{ quiz.title }}</td>
+                    <td>{{ quiz.passingScore }}</td>
+                    <td>
+                        <a href="{{ path('app_quiz_show', {'id': quiz.id}) }}" class="btn btn-info btn-sm">Show</a>
+                        <a href="{{ path('app_quiz_edit', {'id': quiz.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {# Actions additionnelles #}
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ path('app_quiz_new') }}" class="btn btn-success">Create New Quiz</a>
+            <a href="{{ path('app_quiz_export_pdf') }}" class="btn btn-danger">Export to PDF</a>
+        </div>
+    </div>
+{% endblock %}

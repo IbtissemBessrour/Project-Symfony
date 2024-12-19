@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}New Formation{% endblock %}
 
 {% block stylesheets %}
@@ -6,9 +7,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Create new Formation</h1>
-
-    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+   <h1>New Formation</h1>
+    {{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }} 
+   
         <div class="form-group">
             {{ form_label(form.nomFormation, null, {'label_attr': {'class': 'control-label'}}) }}
             <div class="col-sm-10">
@@ -37,7 +38,7 @@
         </div>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_formation_index') }}" class="btn btn-secondary">Back to list</a>
+    <a href="{{ path('app_four') }}" class="btn btn-secondary">Back to list</a>
 {% endblock %}
 
 {% block javascripts %}

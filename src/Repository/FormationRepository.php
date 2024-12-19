@@ -40,4 +40,35 @@ class FormationRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    /**
+     * Summary of getTotalNombrePlaces
+     * New
+     */
+    public function getTotalNombrePlaces(): int
+    {
+        return $this->createQueryBuilder('f')
+            ->select('SUM(f.nombrePlaces)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    /**
+     * Summary of getTotalNombrePlaces
+     * End New
+     */
+
+         /**
+     * Summary of getTotalNombrePlaces
+     * New
+     */
+    public function getTotalNombreFormation(): int
+    {
+        return $this->createQueryBuilder('f')
+            ->select('COUNT(f.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    /**
+     * Summary of getTotalNombrePlaces
+     * End New
+     */
 }

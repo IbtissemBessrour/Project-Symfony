@@ -1,16 +1,25 @@
 <?php
 
 namespace App\Controller;
-
+use App\Repository\QuizRepository;
+use App\Repository\UserRepository;
+use App\Repository\SessionRepository;
+use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Bibliotheque;
 use App\Entity\Evenement;
 use App\Entity\Session;
 use App\Entity\Formation;
+use App\Entity\Quiz;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\FormationRepository;
+
+
+
+
 
 class IndexController extends AbstractController
 {
@@ -109,20 +118,44 @@ class IndexController extends AbstractController
             'controller_name' => 'IndexController',
         ]);
     }
+    private $sessionRepository;
     private $entityManager;
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager,SessionRepository $sessionRepository)
     {
         $this->entityManager = $entityManager;
+        $this->sessionRepository = $sessionRepository;
 
     }
 
-    #[Route('/Admin', name: 'app_Admin')]
-
-    public function Admin(): Response
+    #[Route('/Admin', name: 'app_Admin', methods: ['GET'])]
+    public function Admin(UserRepository $UserRepository, Request $request): Response
     {
-        $users = $this->entityManager->getRepository(User::class)->findAll();
+        // Récupération des valeurs de recherche depuis la requête GET
+        $searchNom = $request->query->get('searchNom', '');
+    
+        // Création de la requête pour récupérer les utilisateurs
+        $queryBuilder = $UserRepository->createQueryBuilder('u');
+    
+        // Appliquer les filtres de recherche
+        if ($searchNom) {
+            $queryBuilder->andWhere('u.nom LIKE :nom')
+                         ->setParameter('nom', '%' . $searchNom . '%');
+        }
+    
+        // Appliquer le tri
+        $sort = $request->query->get('sort', 'prenom'); // Par défaut, tri par prénom
+        $order = $request->query->get('order', 'ASC');  // Par défaut, ordre croissant
+        $queryBuilder->orderBy('u.' . $sort, $order);
+    
+        // Récupérer les utilisateurs filtrés
+        $users = $queryBuilder->getQuery()->getResult();
+    
+        // Récupérer les bibliothèques (ou d'autres données nécessaires)
         $bibliotheque = $this->entityManager->getRepository(Bibliotheque::class)->findAll();
-        return $this->render('dashboard/adminDa.html.twig', [
+    
+        // Retourner la vue avec les données
+        return $this->render('dashboard/DahAdmin.htlml.twig', [
+            'searchNom' => $searchNom,
             'users' => $users,
             'bibliotheque' => $bibliotheque,
         ]);
@@ -150,7 +183,7 @@ class IndexController extends AbstractController
         ]);
     }
 
-    #[Route('/four', name: 'app_four')]
+   /* #[Route('/four', name: 'app_four')]
     public function fourmateu(): Response
     {
         $user = $this->getUser();
@@ -161,10 +194,59 @@ class IndexController extends AbstractController
             'session' => $session,
             'user' => $user,
         ]);
+    }*/
+    /**
+     * New
+     */
+    #[Route('/four', name: 'app_four', methods: ['GET'])]
+    public function fourmateu(FormationRepository $formationRepository,SessionRepository $sessionRepository, Request $request): Response
+    {
+                // Appel de la méthode countSessionsToday() qui retourne un entier
+                $sessionsToday = $this->sessionRepository->countSessionsToday(); 
+                        //Callcule de nombre total de Session
+    $totalSession = $sessionRepository->getTotalNombreSession();
+        //Callcule de nombre total de formation
+    $totalformation = $formationRepository->getTotalNombreFormation();
+        //Callcule de nombre total de place
+     $totalPlaces = $formationRepository->getTotalNombrePlaces();
+       // Récupération des valeurs de recherche depuis la requête GET
+     $searchNom = $request->query->get('searchNom', '');
+
+        // Création de la requête pour récupérer les formations
+    $queryBuilder = $formationRepository->createQueryBuilder('f');
+
+       // Appliquer les filtres de recherche
+     if ($searchNom) {
+        $queryBuilder->andWhere('f.nomFormation LIKE :nom')
+                  ->setParameter('nom', '%' . $searchNom . '%');
+ }
+
+ // Appliquer le tri
+ $sort = $request->query->get('sort', 'nomFormation');
+ $order = $request->query->get('order', 'ASC');
+ $queryBuilder->orderBy('f.' . $sort, $order);
+
+ // Récupérer les formations filtrées
+ $formation = $queryBuilder->getQuery()->getResult();
+        $user = $this->getUser();
+        $formation = $this->entityManager->getRepository(Formation::class)->findAll();
+        $session = $this->entityManager->getRepository(Session::class)->findAll();
+        return $this->render('dashboard/DahNew.html.twig', [
+            'searchNom' => $searchNom,
+            'formation' => $formation,
+            'session' => $session,
+            'user' => $user,
+            'totalPlaces' => $totalPlaces,
+            'totalformation' => $totalformation,
+            'totalSession' => $totalSession,
+            'sessions_today' => $sessionsToday
+
+        ]);
     }
-
-
-    #[Route('/four', name: 'app_Session')]
+/**
+ * End New
+ */
+   /* #[Route('/fourt', name: 'app_Session')]
     public function Session(): Response
     {
         $user = $this->getUser();
@@ -174,6 +256,71 @@ class IndexController extends AbstractController
             'formation' => $formation,
             'session' => $session,
             'user' => $user,
+        ]);
+    }*/
+
+    #[Route('/fourt', name: 'app_Session' , methods: ['GET'])]
+    public function Session(SessionRepository $sessionRepository,FormationRepository $formationRepository,  Request $request): Response
+    {
+        // Appel de la méthode countSessionsToday() qui retourne un entier
+        $sessionsToday = $this->sessionRepository->countSessionsToday(); 
+                //Callcule de nombre total de formation
+    $totalformation = $formationRepository->getTotalNombreFormation();
+                //Callcule de nombre total de place
+     $totalPlaces = $formationRepository->getTotalNombrePlaces();
+                //Callcule de nombre total de Session
+    $totalSession = $sessionRepository->getTotalNombreSession();
+         // Récupération des valeurs de recherche depuis la requête GET
+ $searchNom = $request->query->get('searchNom', '');
+
+ // Création de la requête pour récupérer les formations
+ $queryBuilder = $sessionRepository->createQueryBuilder('f');
+
+ // Appliquer les filtres de recherche
+ if ($searchNom) {
+     $queryBuilder->andWhere('f.nomFormation LIKE :nom')
+                  ->setParameter('nom', '%' . $searchNom . '%');
+ }
+
+ // Appliquer le tri
+ $sort = $request->query->get('sort', 'dateDebue');
+ $order = $request->query->get('order', 'ASC');
+ $queryBuilder->orderBy('f.' . $sort, $order);
+
+ // Récupérer les formations filtrées
+ $formation = $queryBuilder->getQuery()->getResult();
+        $user = $this->getUser();
+        $formation = $this->entityManager->getRepository(Formation::class)->findAll();
+        $session = $this->entityManager->getRepository(Session::class)->findAll();
+        return $this->render('dashboard/DahNewSe.html.twig', [
+            'searchNom' => $searchNom,
+            'formation' => $formation,
+            'session' => $session,
+            'user' => $user,
+            'totalSession' => $totalSession,
+            'totalPlaces' => $totalPlaces,
+            'totalformation' => $totalformation,
+            'sessions_today' => $sessionsToday
+        ]);
+    } 
+
+    #[Route('/Quiz', name: 'app_quiz')]
+    public function quiz(Request $request, QuizRepository $quizRepository): Response
+    {
+        $search = $request->query->get('search', '');
+    
+        if (!empty($search)) {
+            $quizzes = $quizRepository->findByTitle($search);
+        } else {
+            $quizzes = $quizRepository->findAll();
+        }
+    
+        return $this->render('quiz/index.html.twig', [
+            'quizzes' => $quizzes,
+        ]);
+        $quizzes = $this->entityManager->getRepository(Quiz::class)->findAll();
+        return $this->render('dashboard/Dahquiz.html.twig', [
+            'quizzes' => $quizzes,
         ]);
     }
 }

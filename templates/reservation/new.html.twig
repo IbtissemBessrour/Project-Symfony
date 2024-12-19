@@ -1,0 +1,23 @@
+{% block body %}
+    <h1>Créer une nouvelle réservation</h1>
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.nomClient) }}   {# Remplacer nomPersonne par nomClient #}
+            {{ form_widget(form.nomClient) }}  {# Remplacer nomPersonne par nomClient #}
+            {{ form_errors(form.nomClient) }}  {# Remplacer nomPersonne par nomClient #}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.emailClient) }}  {# Remplacer nomPersonne par emailClient #}
+            {{ form_widget(form.emailClient) }} {# Remplacer nomPersonne par emailClient #}
+            {{ form_errors(form.emailClient) }} {# Remplacer nomPersonne par emailClient #}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.date) }}  {# Remplacer nomPersonne par date #}
+            {{ form_widget(form.date) }} {# Remplacer nomPersonne par date #}
+            {{ form_errors(form.date) }} {# Remplacer nomPersonne par date #}
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Sauvegarder</button>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

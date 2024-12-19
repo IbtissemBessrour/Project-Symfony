@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Réservation{% endblock %}
+
+{% block body %}
+    <h1>Détails de la Réservation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID</th>
+                <td>{{ reservation.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom du client</th>
+                <td>{{ reservation.nomClient }}</td>
+            </tr>
+            <tr>
+                <th>Email du client</th>
+                <td>{{ reservation.emailClient }}</td>
+            </tr>
+            <tr>
+                <th>Date de réservation</th>
+                <td>{{ reservation.date|date('Y-m-d H:i') }}</td>
+            </tr>
+            <tr>
+                <th>Événement</th>
+                <td>Pas d'événement</td> <!-- Pas de relation avec Evenement, on met "Pas d'événement" -->
+            </tr>
+        </tbody>
+    </table>
+
+    
+    <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">Modifier</a>
+
+    {{ include('reservation/_delete_form.html.twig') }}
+{% endblock %}

@@ -40,4 +40,42 @@ class SessionRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+         /**
+     * Summary of getTotalNombrePlaces
+     * New
+     */
+    public function getTotalNombreSession(): int
+    {
+        return $this->createQueryBuilder('f')
+            ->select('COUNT(f.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    /**
+     * Summary of getTotalNombrePlaces
+     * End New
+     */
+     /**
+     * Summary of getTotalNombrePlaces
+     * New
+     */
+    // Méthode pour compter les sessions d'aujourd'hui
+    public function countSessionsToday(): int
+    {
+        // Calculer le nombre de sessions créées aujourd'hui
+        $today = new \DateTime('today');
+        
+        return (int) $this->createQueryBuilder('s')
+            ->select('COUNT(s.id)')
+            ->where('s.dateDebue >= :today') // ou dateDebue si c'est la date de début
+            ->setParameter('today', $today)
+            ->getQuery()
+            ->getSingleScalarResult();  // Retourner un entier
+    }
+    /**
+     * Summary of getTotalNombrePlaces
+     * End New
+     */
+
 }

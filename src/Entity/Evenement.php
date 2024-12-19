@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EvenementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
@@ -15,13 +16,34 @@ class Evenement
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nomEvenement = null;
+    #[Assert\NotBlank(message: "Le nom de l'événement ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: "Le nom doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
+    )]
+    private ?string $nomEvenement = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $typeEvenement = null;
+    #[Assert\NotBlank(message: "Le type de l'événement ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 30,
+        minMessage: "Le type doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "Le type ne peut pas dépasser {{ limit }} caractères."
+    )]
+    private ?string $typeEvenement = '';
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: "La date de l'événement est obligatoire.")]
+    #[Assert\Type(
+        type: \DateTimeInterface::class,
+        message: "La date n'est pas valide."
+    )]
     private ?\DateTimeInterface $dateEvenement = null;
+
+    // Getters et Setters ...
 
     public function getId(): ?int
     {

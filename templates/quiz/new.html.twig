@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Quiz{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Create a New Quiz</h1>
+
+        {# Affichage des messages flash (succès ou erreur) #}
+        {% for type, messages in app.flashes %}
+            <div class="alert alert-{{ type }} mt-3">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {# Affichage du formulaire de création de quiz #}
+        {{ form_start(form) }}
+
+        {# Champ Titre avec gestion des erreurs #}
+        <div class="form-group mb-3">
+            {{ form_label(form.title, 'Quiz Title', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            {% for error in form.title.vars.errors %}
+                <div class="text-danger mt-1">{{ error.message }}</div>
+            {% endfor %}
+        </div>
+
+        {# Champ PassingScore avec gestion des erreurs #}
+        <div class="form-group mb-3">
+            {{ form_label(form.passingScore, 'Passing Score', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.passingScore, {'attr': {'class': 'form-control'}}) }}
+            {% for error in form.passingScore.vars.errors %}
+                <div class="text-danger mt-1">{{ error.message }}</div>
+            {% endfor %}
+        </div>
+
+        {# Bouton de soumission #}
+        <div class="form-group mt-4">
+            <button class="btn btn-primary" type="submit">Create Quiz</button>
+            <a href="{{ path('app_quiz_index') }}" class="btn btn-secondary">Back to List</a>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

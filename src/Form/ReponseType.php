@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Form;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use App\Entity\Reponse;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class ReponseType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('contenu', TextType::class, [
+                'label' => 'Nom de contenu',
+                'attr' => ['class' => 'form-control'],
+                'empty_data' => '']) // Set default value)
+            ->add('utilisateur', TextType::class, [
+                'label' => 'Nom de utilisateur',
+                'attr' => ['class' => 'form-control'],
+                'empty_data' => '']) // Set default value)
+            ->add('reclamation', TextType::class, [
+                'label' => 'reclamation',
+                'attr' => ['class' => 'form-control'],
+                'empty_data' => ''])
+            ->add('statut', TextType::class, [
+                'label' => 'statut',
+                'attr' => ['class' => 'form-control'],
+                'empty_data' => ''])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Reponse::class,
+        ]);
+    }
+}

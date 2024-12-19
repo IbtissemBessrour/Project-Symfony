@@ -2,7 +2,23 @@
 {% block title %}Formation index{% endblock %}
 
 {% block body %}
-    <h1>Formation index</h1>
+<!-- Formulaire de recherche avec carte -->
+<div class="card mb-4">
+        <div class="card-header">
+            Recherche
+        </div>
+        <div class="card-body">
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" name="searchNom" value="{{ searchNom }}" class="form-control" placeholder="Nom de formation" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3 btn-lg">Rechercher</button>
+            </form>
+        </div>
+</div>
+<!-- End Formulaire de recherche avec carte -->
 
     <table class="table table-striped">
         <thead>
@@ -37,6 +53,6 @@
         {% endfor %}
         </tbody>
     </table>
-
+    <a href="{{ path('app_four') }}" class="btn btn-primary">Bake</a>
     <a href="{{ path('app_formation_new') }}" class="btn btn-primary">Create new</a>
 {% endblock %}

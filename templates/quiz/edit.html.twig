@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Quiz{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Edit Quiz</h1>
+
+        {# Affichage des messages flash pour retour utilisateur #}
+        {% for type, messages in app.flashes %}
+            <div class="alert alert-{{ type }} mt-3">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {# Formulaire d'édition du quiz (inclus via un fichier partagé) #}
+        <div class="card p-4 mb-4">
+            <h2 class="mb-3">Quiz Details</h2>
+            {{ include('quiz/_form.html.twig', {'button_label': 'Update Quiz'}) }}
+        </div>
+
+        {# Boutons pour naviguer ou supprimer #}
+        <div class="d-flex justify-content-between">
+            <a href="{{ path('app_quiz_index') }}" class="btn btn-secondary">Back to List</a>
+            {{ include('quiz/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

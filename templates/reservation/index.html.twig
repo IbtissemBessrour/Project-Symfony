@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reservation index{% endblock %}
+
+{% block body %}
+    <h1>Reservation index</h1>
+
+    {# Formulaire de recherche #}
+    <form method="get" action="{{ path('app_reservation_index') }}">
+        <div class="form-group">
+            <label for="searchNomClient">Nom du Client</label>
+            <input type="text" id="searchNomClient" name="searchNomClient" class="form-control" value="{{ searchNomClient }}">
+        </div>
+        <div class="form-group">
+            <label for="searchEmailClient">Email du Client</label>
+            <input type="text" id="searchEmailClient" name="searchEmailClient" class="form-control" value="{{ searchEmailClient }}">
+        </div>
+        <div class="form-group">
+            <label for="searchDate">Date de Réservation</label>
+            <input type="date" id="searchDate" name="searchDate" class="form-control" value="{{ searchDate }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
+
+    {# Tableau des réservations #}
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>NomClient</th>
+                <th>EmailClient</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.date ? reservation.date|date('Y-m-d') : '' }}</td>
+                <td>{{ reservation.nomClient }}</td>
+                <td>{{ reservation.emailClient }}</td>
+                <td>
+                    <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}">show</a>
+                    <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucune réservation trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reservation_new') }}" class="btn btn-success mt-3">Créer une nouvelle réservation</a>
+{% endblock %}

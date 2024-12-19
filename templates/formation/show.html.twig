@@ -1,9 +1,97 @@
-{% block title %}Formation{% endblock %}
+{% block stylesheets %}
+<style>
+body {
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center;    /* Centre verticalement */
+  height: 100vh;          /* Hauteur de la page */
+  margin: 0;              /* Supprime les marges par défaut */
+}      
+.container {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  margin: 0; 
+  height: 100vh;
+}
 
+.card_box {
+  width: 400px;
+  height: 350px;
+  border-radius: 20px;
+  background: linear-gradient(170deg, #FFF0DC 0%, #F0BB78 100%);
+  position: relative;
+  box-shadow: 0 25px 50px #543A14;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+.card_box:hover {
+  transform: scale(0.9);
+}
+
+.card_box span {
+  position: absolute;
+  overflow: hidden;
+  width: 180px;
+  height: 180px;
+  top: -10px;
+  left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card_box span::before {
+  content: 'Premium';
+  position: absolute;
+  width: 150%;
+  height: 40px;
+  background-image: linear-gradient(45deg, #131010 0%, rgb(77, 74, 74) 51%, #131010 100%);
+  transform: rotate(-45deg) translateY(-20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.23);
+}
+
+.card_box span::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  bottom: 0;
+  left: 0;
+  height: 10px;
+  z-index: -1;
+  box-shadow: 140px -140px #cc3f47;
+  background-image: linear-gradient(45deg, #FF512F 0%, #F09819 51%, #FF512F 100%);
+}
+
+.table {
+
+  z-index: 1000;
+}
+
+.table th, .table td {
+ /* position: relative;
+  left:120PX;
+  bottom:-50px;*/
+  z-index: 1001;
+}
+</style>
+{% endblock %}
 {% block body %}
-    <h1>Formation</h1>
-
-    <table class="table">
+<div class="container">
+ <div class="card_box">
+ <span>
+ </span>
+</div>
+</div> 
+<table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -27,6 +115,5 @@
     <a href="{{ path('app_four') }}">back to list</a>
 
     <a href="{{ path('app_formation_edit', {'id': formation.id}) }}">edit</a>
-
-    
+   
 {% endblock %}

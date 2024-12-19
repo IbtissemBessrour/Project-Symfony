@@ -16,28 +16,38 @@ class EvenementRepository extends ServiceEntityRepository
         parent::__construct($registry, Evenement::class);
     }
 
-    //    /**
-    //     * @return Evenement[] Returns an array of Evenement objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findByNom(string $nom): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.nomEvenement LIKE :nom')
+            ->setParameter('nom', '%' . $nom . '%')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Evenement
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findByType(string $type): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.typeEvenement = :type')
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAfterDate(\DateTimeInterface $date): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.dateEvenement >= :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findBySort(string $sort, string $order = 'ASC'): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.' . $sort, $order)
+            ->getQuery()
+            ->getResult();
+    }
 }

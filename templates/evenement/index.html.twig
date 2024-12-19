@@ -1,18 +1,42 @@
-
+{% extends 'base.html.twig' %}
 
 {% block title %}Evenement index{% endblock %}
 
 {% block body %}
-    <h1>Evenement index</h1>
+    <h1 class="mb-4">Liste des événements</h1>
 
-    <table class="table">
-        <thead>
+    <!-- Formulaire de recherche avec carte -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Recherche
+        </div>
+        <div class="card-body">
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" name="searchNom" value="{{ searchNom }}" class="form-control" placeholder="Nom de l'événement" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="searchType" value="{{ searchType }}" class="form-control" placeholder="Type de l'événement" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="date" name="searchDate" value="{{ searchDate }}" class="form-control" placeholder="Date de l'événement" min="2020-01-01" max="{{ 'now'|date('Y-m-d') }}">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3 btn-lg">Rechercher</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tableau des événements -->
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="thead-dark">
             <tr>
                 <th>Id</th>
                 <th>NomEvenement</th>
                 <th>TypeEvenement</th>
                 <th>DateEvenement</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -23,17 +47,98 @@
                 <td>{{ evenement.typeEvenement }}</td>
                 <td>{{ evenement.dateEvenement ? evenement.dateEvenement|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_evenement_show', {'id': evenement.id}) }}">show</a>
-                    <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}">edit</a>
+                    <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                    <form method="post" action="{{ path('app_evenement_delete', {'id': evenement.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ evenement.id) }}">
+                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5" class="text-center">Aucun événement trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_evenement_new') }}">Create new</a>
+    <!-- Formulaire de filtrage -->
+    <form id="filterForm" class="mb-4">
+        <label for="typeEvenement">Type d'événement :</label>
+        <select id="typeEvenement">
+            <option value="">Tous</option>
+            <option value="seminaire">seminaire</option>
+            <option value="conference">Conférence</option>
+            <!-- Ajouter d'autres types d'événements ici -->
+        </select>
+
+        
+
+        <button type="submit" class="btn btn-primary">Filtrer</button>
+    </form>
+
+    <button id="countButton" class="btn btn-info">Obtenir le nombre d'événements</button>
+    <div id="eventCount">Chargement...</div>
+
+    <a href="{{ path('app_evenement_new') }}" class="btn btn-success btn-lg mt-4">Créer un nouvel événement</a>
+
+    <!-- Javascript pour le comptage et le débogage -->
+    <script>
+        // Fonction de débogage pour vérifier si les filtres sont appliqués
+        document.getElementById('filterForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêcher l'envoi du formulaire pour tester la soumission
+
+            // Récupérer les valeurs des filtres
+            let type = document.getElementById('typeEvenement').value;
+            let dateDebut = document.getElementById('dateDebut').value;
+            let dateFin = document.getElementById('dateFin').value;
+
+            // Log les valeurs pour déboguer
+            console.log('Type:', type); 
+            console.log('Date de début:', dateDebut); 
+            console.log('Date de fin:', dateFin); 
+
+            // Vérification des valeurs
+            if (!type && !dateDebut && !dateFin) {
+                alert("Veuillez sélectionner au moins un critère de filtre.");
+                return;
+            }
+
+            // Créer l'URL avec les paramètres de la requête
+            let url = /evenement/count?type=${type}&dateDebut=${dateDebut}&dateFin=${dateFin};
+            console.log("URL requête:", url); // Afficher l'URL dans la console pour déboguer
+
+            // Effectuer la requête AJAX avec Fetch
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Mettre à jour l'affichage du nombre d'événements
+                    console.log('Données du comptage:', data); // Log les données reçues
+                    document.getElementById('eventCount').textContent = 'Nombre d\'événements : ' + data.count;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById('eventCount').textContent = 'Erreur lors du comptage des événements.';
+                });
+        });
+
+        // Fonction pour le comptage des événements (maintenue pour le bouton)
+        document.getElementById('countButton').addEventListener('click', function() {
+            let type = document.getElementById('typeEvenement').value;
+            let dateDebut = document.getElementById('dateDebut').value;
+            let dateFin = document.getElementById('dateFin').value;
+
+            let url = /evenement/count?type=${type}&dateDebut=${dateDebut}&dateFin=${dateFin};
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('eventCount').textContent = 'Nombre d\'événements : ' + data.count;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById('eventCount').textContent = 'Erreur lors du comptage des événements.';
+                });
+        });
+    </script>
 {% endblock %}

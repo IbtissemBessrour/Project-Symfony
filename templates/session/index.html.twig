@@ -1,9 +1,25 @@
+{% extends 'base.html.twig' %}
 {% block title %}Session index{% endblock %}
 
 {% block body %}
-    <h1>Session index</h1>
-
-    <table class="table">
+<!-- Formulaire de recherche avec carte -->
+<div class="card mb-4">
+        <div class="card-header">
+            Recherche
+        </div>
+        <div class="card-body">
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" name="searchNom" value="{{ searchNom }}" class="form-control" placeholder="Nom de formation" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3 btn-lg">Rechercher</button>
+            </form>
+        </div>
+</div>
+<!-- End Formulaire de recherche avec carte -->
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
@@ -21,8 +37,12 @@
                 <td>{{ session.dateFine ? session.dateFine|date('Y-m-d') : '' }}</td>
                 <td>{{ session.nomFormation }}</td>
                 <td>
-                    <a href="{{ path('app_session_show', {'id': session.id}) }}">show</a>
-                    <a href="{{ path('app_session_edit', {'id': session.id}) }}">edit</a>
+                   
+                    <a href="{{ path('app_session_edit', {'id': session.id}) }}" class="btn btn-warning btn-sm">edit</a>
+                    <form method="post" action="{{ path('app_session_delete', {'id': session.id}) }}" style="display: inline-block;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ session.id) }}">
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +53,6 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_session_new') }}">Create new</a>
+    <a href="{{ path('app_session_new') }}" class="btn btn-primary">Create new</a>
+    <a href="{{ path('app_Session') }}" class="btn btn-primary">Back </a>
 {% endblock %}

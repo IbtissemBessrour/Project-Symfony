@@ -1,0 +1,28 @@
+{% block body %}
+    <h1>Modifier la réservation</h1>
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.nomClient) }}
+            {{ form_widget(form.nomClient) }}
+            {{ form_errors(form.nomClient) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.emailClient) }}
+            {{ form_widget(form.emailClient) }}
+            {{ form_errors(form.emailClient) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.date) }}
+            {{ form_widget(form.date) }}
+            {{ form_errors(form.date) }}
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Sauvegarder</button>
+            <a href="{{ path('app_reservation_index') }}" class="btn btn-secondary">Annuler</a>
+        </div>
+    {{ form_end(form) }}
+    
+    <form method="POST" action="{{ path('app_reservation_delete', {id: reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?');">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+    </form>
+{% endblock %}

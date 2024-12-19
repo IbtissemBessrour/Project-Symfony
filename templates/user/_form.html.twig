@@ -1,4 +1,40 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+<div>
+    {{ form_row(form.nom) }}
+    {% for error in form.nom.vars.errors %}
+        <div class="text-danger">{{ error.message }}</div>
+    {% endfor %}
+</div>
+
+<div>
+    {{ form_row(form.prenom) }}
+    {% for error in form.prenom.vars.errors %}
+        <div class="text-danger">{{ error.message }}</div>
+    {% endfor %}
+</div>
+
+<div>
+    {{ form_row(form.email) }}
+    {% for error in form.email.vars.errors %}
+        <div class="text-danger">{{ error.message }}</div>
+    {% endfor %}
+</div>
+
+<div>
+    {{ form_row(form.Type) }}
+    {% for error in form.Type.vars.errors %}
+        <div class="text-danger">{{ error.message }}</div>
+    {% endfor %}
+</div>
+
+<div>
+    {{ form_row(form.motDePasse) }}
+    {% for error in form.motDePasse.vars.errors %}
+        <div class="text-danger">{{ error.message }}</div>
+    {% endfor %}
+</div>
+
+<button class="btn">{{ button_label|default('Save') }}</button>
+
 {{ form_end(form) }}

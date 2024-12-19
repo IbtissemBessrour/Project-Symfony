@@ -25,6 +25,16 @@ final class UserController extends AbstractController
         ]);
     }
 
+   /* #[Route('/admin/audit', name: 'admin_audit')]
+    public function indexlog(AuditLogRepository $auditLogRepository)
+    {
+        $logs = $auditLogRepository->findBy([], ['timestamp' => 'DESC']);
+
+        return $this->render('admin/audit/index.html.twig', [
+            'logs' => $logs,
+        ]);
+    }*/
+
    /* #[Route(name: 'app_user_index', methods: [ 'GET'])]
     public function dath(UserRepository $userRepository): Response
     {
@@ -44,48 +54,38 @@ final class UserController extends AbstractController
 
      //METHODE LOGIN
      #[Route('/login-check', name: 'app_login_check', methods: ['POST'])]
-     public function checkLogin(Request $request ,UserRepository $userRepository) : Response
-     {
-         $email = $request->request->get('email');
-         $password = $request->request->get('password');
-         // Rechercher l'utilisateur par email
-         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
- 
-         if ($user && $user->getMotDePasse() === $password) {
-            if($user && $user->getType() === 'Etudient'){
-                // Stocker l'information de connexion dans la session
-             $session = $request->getSession();
-             $session->set('user_id', $user->getId());
- 
-             // Rediriger vers la page d'accueil
-             return $this->redirectToRoute('app_Etudient');
-            }elseif($user && $user->getType() === 'Fourmateur'){
-                // Stocker l'information de connexion dans la session
-             $session = $request->getSession();
-             $session->set('user_id', $user->getId());
- 
-             // Rediriger vers la page d'accueil
-             return $this->redirectToRoute('app_Fourmateur');
-            }elseif($user && $user->getMotDePasse() === "123" && $user->getEmail() === "Admin@esprit.tn"){
-                
-                // Stocker l'information de connexion dans la session
-             $session = $request->getSession();
-             $session->set('user_id', $user->getId());
- 
-             // Rediriger vers la page d'accueil
-             return $this->redirectToRoute('app_Admin');
-            }else{ $this->addFlash('error', 'Email ou mot de passe incorrect');
- 
-                return $this->redirectToRoute('app_enregistre');}
-    
-         } else {
-             // Afficher un message d'erreur si les identifiants sont incorrects
-             $this->addFlash('error', 'Email ou mot de passe incorrect');
- 
-             return $this->redirectToRoute('app_enregistre');
-         }
-        
-     }
+public function checkLogin(Request $request, UserRepository $userRepository): Response
+{
+    $email = $request->request->get('email');
+    $password = $request->request->get('password');
+
+    // Rechercher l'utilisateur par email
+    $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+
+    if ($user && $user->getMotDePasse() === $password) {
+        // Vérifier le type de l'utilisateur
+        $session = $request->getSession();
+        $session->set('user_id', $user->getId());
+
+        if ($user->getType() === 'etudiant') {
+            return $this->redirectToRoute('app_Etudient');
+        } elseif ($user->getType() === 'formateur') {
+            return $this->redirectToRoute('app_Fourmateur');
+        } elseif ($user->getType() === 'admin') {
+            return $this->redirectToRoute('app_Admin');
+        } else {
+            // Si le type n'est pas reconnu
+            $this->addFlash('error', 'Type d\'utilisateur inconnu');
+            return $this->redirectToRoute('app_enregistre');
+        }
+    } else {
+        // Afficher un message d'erreur si les identifiants sont incorrects
+        $this->addFlash('error', 'Email ou mot de passe incorrect');
+        return $this->redirectToRoute('app_enregistre');
+    }
+}
+
+   
 
 
     //METHODE ENREGISTRE
@@ -159,6 +159,36 @@ final class UserController extends AbstractController
         // Rediriger vers la liste des utilisateurs
         return $this->redirectToRoute('app_Admin');
     }
+
+    //recherche---------
+
+  /* #[Route('/Admin', name: 'app_Admin' , methods: ['GET'])]
+    public function Session(UserRepository $UserRepository,  Request $request): Response
+    {
+         // Récupération des valeurs de recherche depuis la requête GET
+ $searchNom = $request->query->get('searchNom', '');
+
+ // Création de la requête pour récupérer les users
+ $queryBuilder = $UserRepository->createQueryBuilder('u');
+
+ // Appliquer les filtres de recherche
+ if ($searchNom) {
+     $queryBuilder->andWhere('u.nom LIKE :nom')
+                  ->setParameter('nom', '%' . $searchNom . '%');
+ }
+
+ // Appliquer le tri
+ $sort = $request->query->get('sort', 'prenom');
+ $order = $request->query->get('order', 'ASC');
+ $queryBuilder->orderBy('u.' . $sort, $order);
+
+ // Récupérer les users filtrées
+ $user = $queryBuilder->getQuery()->getResult();
+        return $this->render('dashboard/adminDa.html.twig', [
+            'searchNom' => $searchNom,
+            'user' => $user,
+        ]);
+    }*/
     
 
 }

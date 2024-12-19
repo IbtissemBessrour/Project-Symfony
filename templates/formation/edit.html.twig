@@ -4,11 +4,12 @@
 {% block stylesheets %}
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 {% endblock %}
-
 {% block body %}
     <h1>Edit Formation</h1>
+<!-- End Formulaire de recherche avec carte -->
 
-    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+    {{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }} 
+   
         <div class="form-group">
             {{ form_label(form.nomFormation, null, {'label_attr': {'class': 'control-label'}}) }}
             <div class="col-sm-10">
@@ -37,7 +38,7 @@
         </div>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_formation_index') }}" class="btn btn-secondary">Back to list</a>
+    <a href="{{ path('app_four') }}" class="btn btn-secondary">Back to list</a>
 {% endblock %}
 
 {% block javascripts %}

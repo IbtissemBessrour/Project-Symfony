@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\FormationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,13 +16,18 @@ class Formation
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nomFormation = null;
+    #[Assert\NotBlank(message: "Le nom de la formation ne peut pas être vide.")]
+    #[Assert\Length(max: 255, maxMessage: "Le nom de la formation ne peut pas dépasser {{ limit }} caractères.")]
+    private ?string $nomFormation = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $discription = null;
+    #[Assert\NotBlank(message: "La description ne peut pas être vide.")]
+    private ?string $discription = '';
 
     #[ORM\Column]
-    private ?int $nombrePlaces = null;
+    #[Assert\NotBlank(message: "Le nombre de places ne peut pas être vide.")]
+    #[Assert\Positive(message: "Le nombre de places doit être un nombre positif.")]
+    private ?int $nombrePlaces = 0;
 
     public function getId(): ?int
     {
@@ -63,6 +69,4 @@ class Formation
 
         return $this;
     }
-
-
 }

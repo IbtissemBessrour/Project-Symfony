@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reponse index{% endblock %}
+
+{% block body %}
+    <h1>Reponse index</h1>
+<!-- Formulaire de recherche avec carte -->
+<div class="card mb-4">
+        <div class="card-header">
+            Recherche
+        </div>
+        <div class="card-body">
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" name="searchNom" value="{{ searchNom }}" class="form-control" placeholder="Nom de formation" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3 btn-lg">Rechercher</button>
+            </form>
+        </div>
+</div>
+<!-- End Formulaire de recherche avec carte -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Contenu</th>
+                <th>Utilisateur</th>
+                <th>Reclamation</th>
+                <th>Statut</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reponse in reponses %}
+            <tr>
+                <td>{{ reponse.id }}</td>
+                <td>{{ reponse.contenu }}</td>
+                <td>{{ reponse.utilisateur }}</td>
+                <td>{{ reponse.reclamation }}</td>
+                <td>{{ reponse.statut }}</td>
+                <td>
+                    <a href="{{ path('app_reponse_show', {'id': reponse.id}) }}">show</a>
+                    <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reponse_new') }}">Create new</a>
+{% endblock %}
